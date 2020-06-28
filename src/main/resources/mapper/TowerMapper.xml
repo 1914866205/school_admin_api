@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft1851.smart.campus.mapper.TowerMapper">
+
+    <!--根据角色id查询顶级权限（父类id=0），采用多对多调用查询子类权限方法-->
+    <resultMap id="menuMap" type="map">
+        <collection property="rooms" column="{towerId=pk_tower_id}" select="getRoomByTowerId" />
+    </resultMap>
+
+    <select id="getTeachTowersByType" resultMap="menuMap">
+        SELECT pk_tower_id, name
+        FROM tower
+        WHERE type = 2
+        ORDER BY gmt_create
+    </select>
+
+    <!--根据父类id及角色id查询子类权限-->
+    <select id="getRoomByTowerId" resultType="map">
+        SELECT id, name
+        FROM room
+        WHERE tower_id=#{towerId}
+        ORDER BY gmt_create
+    </select>
+
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft1851.smart.campus.mapper.SysMenuMapper">
+
+    <!--根据角色id查询顶级权限（父类id=0），采用多对多调用查询子类权限方法-->
+    <resultMap id="menuMap" type="map">
+        <collection property="subMenus" column="{parentId=pk_menu_id}" select="getChildMenu" />
+    </resultMap>
+
+    <select id="getParentMenu" resultMap="menuMap">
+        SELECT t1.name, t1.icon, t1.path, t1.sort, t1.pk_menu_id
+        FROM sys_menu t1
+        WHERE t1.parent_id = 0
+        ORDER BY t1.sort
+    </select>
+
+    <!--根据父类id及角色id查询子类权限-->
+    <select id="getChildMenu" resultType="map">
+        SELECT t1.name, t1.icon, t1.path, t1.sort, t1.pk_menu_id
+        FROM sys_menu t1
+        WHERE t1.parent_id = #{parentId}
+        ORDER BY t1.sort
+    </select>
+
+</mapper>

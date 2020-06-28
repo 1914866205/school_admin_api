@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft1851.smart.campus.mapper.FleaGoodsMapper">
+
+
+<!--    查询所有售出商品的个数及其类型-->
+    <resultMap id="showMap" type="com.soft1851.smart.campus.model.vo.ShopVo">
+        <result column="flea_type_pk_flea_type_id" property="name"/>
+        <result column="number" property="value"/>
+    </resultMap>
+
+    <select id="selectTypeIdAndNumber" resultMap="showMap">
+        SELECT flea_type_pk_flea_type_id,COUNT(flea_type_pk_flea_type_id) as number
+        FROM flea_goods
+        WHERE is_deleted=1
+        GROUP BY flea_type_pk_flea_type_id
+    </select>
+
+    <select id="findTypeNameById"  resultType="String" parameterType="String">
+        SELECT type_name
+        FROM flea_type
+        WHERE pk_flea_type_id=#{typeId}
+    </select>
+
+
+
+    <select id="getAllProfit"  resultType="java.lang.Double" >
+        SELECT sum(goods_price)
+        FROM flea_goods
+    </select>
+</mapper>

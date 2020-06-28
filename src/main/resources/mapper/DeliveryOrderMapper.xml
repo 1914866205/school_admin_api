@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft1851.smart.campus.errends.mapper.DeliveryOrderMapper">
+
+    <resultMap id="orderResultMap" type="com.soft1851.smart.campus.errends.domain.vo.DeliveryOderInformationVo">
+        <result property="id" column="id" />
+        <result property="founderId" column="founder_id" />
+        <result property="founderName" column="founder_name" />
+        <result property="originAddress" column="origin_address" />
+        <result property="destination" column="destination" />
+        <result property="founderPhonenumber" column="founder_phonenumber" />
+        <result property="type" column="type" />
+        <result property="priceRange" column="price_rang" />
+        <result property="oderCreateTime" column="oder_Create_time" />
+        <result property="deliveryTime" column="delivery_time" />
+        <result property="amount" column="amount" />
+        <result property="receiverName" column="receiver_name" />
+        <result property="remark" column="remark" />
+        <result property="receiverPhoneNumber" column="receiver_phone_number" />
+    </resultMap>
+    <select id="getByOrderIdOrFounderName" resultMap="orderResultMap"  resultType="com.soft1851.smart.campus.errends.domain.dto.DeliveryOrderDto">
+        select * from delivery_order t1 left join commodity t2 on t1.commodity_id = t2.id
+        where t1.id like concat('%',concat(#{founderId}),'%') or t1.founder_name like concat('%',concat(#{founderId}),'%') order by t1.id limit #{currentPage},#{size}
+        </select>
+
+</mapper>
